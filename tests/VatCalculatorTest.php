@@ -339,14 +339,14 @@ class VatCalculatorTest extends TestCase
 
 	public function testCalculateHighVatType(): void
 	{
-		$result = $this->vatCalculator->calculate(24.00, 'NL', null, false, VatRates::HIGH);
+		$result = $this->vatCalculator->calculate(24.00, 'NL', null, false, VatRates::STANDARD_RATE);
 		$this->assertEquals(29.04, round($result->getPrice(), 2));
 	}
 
 
 	public function testCalculateLowVatType(): void
 	{
-		$result = $this->vatCalculator->calculate(24.00, 'NL', null, false, VatRates::LOW);
+		$result = $this->vatCalculator->calculate(24.00, 'NL', null, false, VatRates::REDUCED_RATE);
 		$this->assertEquals(26.16, round($result->getPrice(), 2));
 	}
 
