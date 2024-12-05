@@ -41,6 +41,17 @@ class VatRates
 				self::SUPER_REDUCED_RATE => 0.05,
 				self::PARKING_RATE => 0.13,
 			],
+			'since' => [
+				'2022-01-01 00:00:00 Europe/Vienna' => [
+					'rate' => 0.20,
+					'rates' => [
+						self::STANDARD_RATE => 0.20,
+						self::REDUCED_RATE => 0.10,
+						self::REDUCED_2ND_RATE => 0.13,
+						self::PARKING_RATE => 0.13,
+					],
+				],
+			],
 			'exceptions' => [
 				'Jungholz' => 0.19,
 				'Mittelberg' => 0.19,
