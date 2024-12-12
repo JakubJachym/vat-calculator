@@ -311,6 +311,29 @@ class VatRates
 		],
 		'SK' => [ // Slovakia
 			'rate' => 0.20,
+			'rates' => [
+				self::STANDARD_RATE => 0.20,
+				self::REDUCED_RATE => 0.10,
+				self::REDUCED_2ND_RATE => 0.05,
+			],
+			'since' => [
+				'2025-01-01 00:00:00 Europe/Bratislava' => [
+					'rate' => 0.23,
+					'rates' => [
+						self::STANDARD_RATE => 0.23,
+						self::REDUCED_RATE => 0.19,
+						self::REDUCED_2ND_RATE => 0.05,
+					],
+				],
+				'2024-01-01 00:00:00 Europe/Bratislava' => [
+					'rate' => 0.20,
+					'rates' => [
+						self::STANDARD_RATE => 0.20,
+						self::REDUCED_RATE => 0.10,
+						self::REDUCED_2ND_RATE => 0.05,
+					],
+				],
+			],
 		],
 
 		// Countries associated with EU countries that have a special VAT rate
