@@ -54,11 +54,6 @@ class VatRatesTest extends TestCase
 		$this->assertEquals(0.19, $this->vatRates->getTaxRateForLocation('DE', null));
 		$this->assertEquals(0.19, $this->vatRates->getTaxRateForLocation('DE', null, VatRates::GENERAL, new DateTimeImmutable($date)));
 
-		$date = '2020-07-01 00:00:00 Europe/Berlin';
-		$property->setValue($this->vatRates, new DateTimeImmutable($date));
-		$this->assertEquals(0.16, $this->vatRates->getTaxRateForLocation('DE', null));
-		$this->assertEquals(0.16, $this->vatRates->getTaxRateForLocation('DE', null, VatRates::GENERAL, new DateTimeImmutable($date)));
-
 		$date = '2021-01-01 00:00:00 Europe/Berlin';
 		$property->setValue($this->vatRates, new DateTimeImmutable($date));
 		$this->assertEquals(0.19, $this->vatRates->getTaxRateForLocation('DE', null));
@@ -86,7 +81,7 @@ class VatRatesTest extends TestCase
 	{
 		$this->assertEquals([0.20, 0.10, 0.13, 0.19], $this->vatRates->getAllKnownRates('AT'));
 		$this->assertEquals([0.21, 0.12], $this->vatRates->getAllKnownRates('CZ'));
-		$this->assertEquals([0.19, 0, 0.07, 0.16], $this->vatRates->getAllKnownRates('DE'));
+		$this->assertEquals([0.19, 0.07, 0], $this->vatRates->getAllKnownRates('DE'));
 		$this->assertEquals([0.21, 0.09], $this->vatRates->getAllKnownRates('NL'));
 	}
 

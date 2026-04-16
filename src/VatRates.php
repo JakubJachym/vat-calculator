@@ -70,29 +70,16 @@ class VatRates
 		],
 		'CZ' => [ // Czech Republic
 			'rate' => 0.21,
-			'since' => [
-				'2024-01-01 00:00:00 Europe/Prague' => [
-					'rate' => 0.21,
-					'rates' => [
-						self::STANDARD_RATE => 0.21,
-						self::REDUCED_RATE => 0.12,
-					],
-				],
+			'rates' => [
+				self::STANDARD_RATE => 0.21,
+				self::REDUCED_RATE => 0.12,
 			],
 		],
 		'DE' => [ // Germany
 			'rate' => 0.19,
-			'since' => [
-				'2021-01-01 00:00:00 Europe/Berlin' => [
-					'rate' => 0.19,
-					'rates' => [
-						self::STANDARD_RATE => 0.19,
-						self::REDUCED_RATE => 0.07,
-					],
-				],
-				'2020-07-01 00:00:00 Europe/Berlin' => [
-					'rate' => 0.16,
-				],
+			'rates' => [
+				self::STANDARD_RATE => 0.19,
+				self::REDUCED_RATE => 0.07,
 			],
 			'exceptions' => [
 				'Heligoland' => 0,
@@ -188,19 +175,11 @@ class VatRates
 		],
 		'IE' => [ // Ireland
 			'rate' => 0.23,
-			'since' => [
-				'2021-03-01 00:00:00 Europe/Dublin' => [
-					'rate' => 0.23,
-					'rates' => [
-						self::STANDARD_RATE => 0.23,
-						self::REDUCED_RATE => 0.135,
-						self::REDUCED_2ND_RATE => 0.09,
-						self::SUPER_REDUCED_RATE => 0.048,
-					],
-				],
-				'2020-09-01 00:00:00 Europe/Dublin' => [
-					'rate' => 0.21,
-				],
+			'rates' => [
+				self::STANDARD_RATE => 0.23,
+				self::REDUCED_RATE => 0.135,
+				self::REDUCED_2ND_RATE => 0.09,
+				self::SUPER_REDUCED_RATE => 0.048,
 			],
 		],
 		'IT' => [ // Italy
@@ -226,26 +205,11 @@ class VatRates
 		],
 		'LU' => [ // Luxembourg
 			'rate' => 0.17,
-			'since' => [
-				'2024-01-01 00:00:00 Europe/Luxembourg' => [
-					'rate' => 0.17,
-					'rates' => [
-						self::STANDARD_RATE => 0.17,
-						self::REDUCED_RATE => 0.08,
-						self::SUPER_REDUCED_RATE => 0.03,
-						self::PARKING_RATE => 0.14,
-					],
-				],
-				// https://legilux.public.lu/eli/etat/leg/loi/2022/10/26/a534/jo
-				'2023-01-01 00:00:00 Europe/Luxembourg' => [
-					'rate' => 0.16,
-					'rates' => [
-						self::STANDARD_RATE => 0.16,
-						self::REDUCED_RATE => 0.07,
-						self::SUPER_REDUCED_RATE => 0.03,
-						self::PARKING_RATE => 0.13,
-					],
-				],
+			'rates' => [
+				self::STANDARD_RATE => 0.17,
+				self::REDUCED_RATE => 0.08,
+				self::SUPER_REDUCED_RATE => 0.03,
+				self::PARKING_RATE => 0.14,
 			],
 		],
 		'LV' => [ // Latvia
@@ -285,29 +249,11 @@ class VatRates
 			'rate' => 0.22,
 		],
 		'SK' => [ // Slovakia
-			'rate' => 0.20,
+			'rate' => 0.23,
 			'rates' => [
-				self::STANDARD_RATE => 0.20,
-				self::REDUCED_RATE => 0.10,
+				self::STANDARD_RATE => 0.23,
+				self::REDUCED_RATE => 0.19,
 				self::REDUCED_2ND_RATE => 0.05,
-			],
-			'since' => [
-				'2025-01-01 00:00:00 Europe/Bratislava' => [
-					'rate' => 0.23,
-					'rates' => [
-						self::STANDARD_RATE => 0.23,
-						self::REDUCED_RATE => 0.19,
-						self::REDUCED_2ND_RATE => 0.05,
-					],
-				],
-				'2024-01-01 00:00:00 Europe/Bratislava' => [
-					'rate' => 0.20,
-					'rates' => [
-						self::STANDARD_RATE => 0.20,
-						self::REDUCED_RATE => 0.10,
-						self::REDUCED_2ND_RATE => 0.05,
-					],
-				],
 			],
 		],
 
@@ -331,23 +277,10 @@ class VatRates
 	private array $optionalTaxRules = [
 		'CH' => [ // Switzerland
 			'rate' => 0.081,
-			'since' => [
-				'2024-01-01 00:00:00 Europe/Zurich' => [
-					'rate' => 0.081,
-					'rates' => [
-						self::STANDARD_RATE => 0.081,
-						self::REDUCED_RATE => 0.026,
-						self::SUPER_REDUCED_RATE => 0.038,
-					],
-				],
-				'2018-01-01 00:00:00 Europe/Zurich' => [
-					'rate' => 0.077,
-					'rates' => [
-						self::STANDARD_RATE => 0.077,
-						self::REDUCED_RATE => 0.025,
-						self::SUPER_REDUCED_RATE => 0.037,
-					],
-				],
+			'rates' => [
+				self::STANDARD_RATE => 0.081,
+				self::REDUCED_RATE => 0.026,
+				self::SUPER_REDUCED_RATE => 0.038,
 			],
 		],
 		'GB' => [ // United Kingdom
