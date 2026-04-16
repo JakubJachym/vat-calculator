@@ -8,8 +8,24 @@ use DateTimeInterface;
 use JakubJachym\VatCalculator\Exceptions\NoVatRulesForCountryException;
 
 /**
- * @phpstan-type CountryTaxRules array{rate: float, rates?: array<string, float>, exceptions?: array<string, float|array<string|null, float>>, since?: array<string, array{rate: float, rates?: array<string, float>}>}
- * @phpstan-type PostalCodeTaxExceptions array<string, array<int, array{postalCode: string, code: string, name?: string, city?: string}>>
+ * @phpstan-type CountryTaxRules array{
+ *     rate: float,
+ *     rates?: array<string, float>,
+ *     exceptions?: array<string, float|array{
+ *         rate: float,
+ *         rates?: array<string, float>
+ *     }>,
+ *     since?: array<string, array{
+ *         rate: float,
+ *         rates?: array<string, float>
+ *     }>
+ * }
+ * @phpstan-type PostalCodeTaxExceptions array<string, array<int, array{
+ *     postalCode: string,
+ *     code: string,
+ *     name?: string,
+ *     city?: string
+ * }>>
  */
 class VatRates
 {
@@ -113,7 +129,7 @@ class VatRates
 			'rates' => [
 				self::STANDARD_RATE => 0.21,
 				self::REDUCED_RATE => 0.10,
-				self::REDUCED_2ND_RATE => 0.04,
+				self::SUPER_REDUCED_RATE => 0.04,
 			],
 			'exceptions' => [
 				'Canary Islands' => 0,
@@ -214,9 +230,20 @@ class VatRates
 		],
 		'LV' => [ // Latvia
 			'rate' => 0.21,
+			'rates' => [
+				self::STANDARD_RATE => 0.21,
+				self::REDUCED_RATE => 0.12,
+				self::REDUCED_2ND_RATE => 0.05,
+			],
 		],
-		'MT' => [ // Malta
+		'MT' => [ // Malta - https://mtca.gov.mt/business-tax/vat1/vat-compliance/vat-rates/vat-rates
 			'rate' => 0.18,
+			'rates' => [
+				self::STANDARD_RATE => 0.18,
+				self::REDUCED_RATE => 0.12,
+				self::REDUCED_2ND_RATE => 0.07,
+				self::SUPER_REDUCED_RATE => 0.05,
+			],
 		],
 		'NL' => [ // Netherlands
 			'rate' => 0.21,
@@ -225,14 +252,38 @@ class VatRates
 				self::REDUCED_RATE => 0.09,
 			],
 		],
-		'PL' => [ // Poland
+		'PL' => [ // Poland - https://www.biznes.gov.pl/en/portal/004162#3
 			'rate' => 0.23,
+			'rates' => [
+				self::STANDARD_RATE => 0.23,
+				self::REDUCED_RATE => 0.08,
+				self::REDUCED_2ND_RATE => 0.05,
+			],
 		],
-		'PT' => [ // Portugal
+		'PT' => [ // Portugal - https://www2.gov.pt/en/cidadaos-europeus-viajar-viver-e-fazer-negocios-em-portugal/impostos-para-atividades-economicas-em-portugal/imposto-sobre-valor-acrescentado-iva-em-portugal
 			'rate' => 0.23,
+			'rates' => [
+				self::STANDARD_RATE => 0.23,
+				self::REDUCED_RATE => 0.13,
+				self::REDUCED_2ND_RATE => 0.06,
+			],
 			'exceptions' => [
-				'Azores' => 0.16,
-				'Madeira' => 0.22,
+				'Azores' => [
+					'rate' => 0.16,
+					'rates' => [
+						self::STANDARD_RATE => 0.16,
+						self::REDUCED_RATE => 0.09,
+						self::REDUCED_2ND_RATE => 0.04,
+					],
+				],
+				'Madeira' => [
+					'rate' => 0.22,
+					'rates' => [
+						self::STANDARD_RATE => 0.22,
+						self::REDUCED_RATE => 0.12,
+						self::REDUCED_2ND_RATE => 0.05,
+					],
+				],
 			],
 		],
 		'RO' => [ // Romania
@@ -242,11 +293,21 @@ class VatRates
 				self::REDUCED_RATE => 0.11,
 			],
 		],
-		'SE' => [ // Sweden
+		'SE' => [ // Sweden - https://verksamt.se/en/taxes-contributions/vat/vat-rates
 			'rate' => 0.25,
+			'rates' => [
+				self::STANDARD_RATE => 0.25,
+				self::REDUCED_RATE => 0.12,
+				self::REDUCED_2ND_RATE => 0.06,
+			],
 		],
-		'SI' => [ // Slovenia
+		'SI' => [ // Slovenia - https://spot.gov.si/en/info/taxes/value-added-tax-vat
 			'rate' => 0.22,
+			'rates' => [
+				self::STANDARD_RATE => 0.22,
+				self::REDUCED_RATE => 0.095,
+				self::REDUCED_2ND_RATE => 0.05,
+			],
 		],
 		'SK' => [ // Slovakia
 			'rate' => 0.23,
@@ -285,6 +346,10 @@ class VatRates
 		],
 		'GB' => [ // United Kingdom
 			'rate' => 0.20,
+			'rates' => [
+				self::STANDARD_RATE => 0.20,
+				self::REDUCED_RATE => 0.05,
+			],
 			'exceptions' => [
 				// UK RAF Bases in Cyprus are taxed at Cyprus rate
 				'Akrotiri' => 0.19,
@@ -293,9 +358,19 @@ class VatRates
 		],
 		'NO' => [ // Norway
 			'rate' => 0.25,
+			'rates' => [
+				self::STANDARD_RATE => 0.25,
+				self::REDUCED_RATE => 0.15,
+				self::REDUCED_2ND_RATE => 0.12,
+			],
 		],
 		'TR' => [ // Turkey
-			'rate' => 0.18,
+			'rate' => 0.20,
+			'rates' => [
+				self::STANDARD_RATE => 0.20,
+				self::REDUCED_RATE => 0.10,
+				self::REDUCED_2ND_RATE => 0.01,
+			],
 		],
 	];
 
@@ -420,12 +495,12 @@ class VatRates
 		],
 		'PT' => [
 			[
-				'postalCode' => '/^9[0-4]\d{2,}$/',
+				'postalCode' => '/^9[0-4]\d{2}($|-\d{3}$)/',
 				'code' => 'PT',
 				'name' => 'Madeira',
 			],
 			[
-				'postalCode' => '/^9[5-9]\d{2,}$/',
+				'postalCode' => '/^9[5-9]\d{2}($|-\d{3}$)/',
 				'code' => 'PT',
 				'name' => 'Azores',
 			],
@@ -519,7 +594,7 @@ class VatRates
 					if (!is_array($rules)) {
 						return $rules;
 					}
-					if ($type !== VatRates::GENERAL && isset($rules['rates'][$type]) && is_float($rules['rates'][$type])) {
+					if ($type !== VatRates::GENERAL && isset($rules['rates'][$type])) {
 						return $rules['rates'][$type];
 					}
 
@@ -600,7 +675,11 @@ class VatRates
 		if (isset($taxRules['exceptions'])) {
 			foreach ($taxRules['exceptions'] as $exceptions) {
 				foreach ((array)$exceptions as $exception) {
-					$rates[] = $exception;
+					if (is_array($exception)) {
+						$rates = array_merge($rates, array_values($exception));
+					} else {
+						$rates[] = $exception;
+					}
 				}
 			}
 		}

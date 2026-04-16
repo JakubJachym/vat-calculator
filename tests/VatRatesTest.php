@@ -67,6 +67,14 @@ class VatRatesTest extends TestCase
 	}
 
 
+	public function testGetRatesExceptionsPtMadeira(): void
+	{
+		$this->assertEquals(0.22, $this->vatRates->getTaxRateForLocation('PT', '9000-059', VatRates::STANDARD_RATE));
+		$this->assertEquals(0.12, $this->vatRates->getTaxRateForLocation('PT', '9000-059', VatRates::REDUCED_RATE));
+		$this->assertEquals(0.05, $this->vatRates->getTaxRateForLocation('PT', '9000-059', VatRates::REDUCED_2ND_RATE));
+	}
+
+
 	public function testGetRatesForLuxembourg(): void
 	{
 		$this->assertEquals(0.17, $this->vatRates->getTaxRateForLocation('LU', null));
