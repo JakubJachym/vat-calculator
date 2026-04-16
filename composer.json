@@ -46,7 +46,7 @@
 		"lint": "vendor/bin/parallel-lint --colors src/ tests/",
 		"phpcs": "vendor/bin/phpcs src/ tests/",
 		"phpstan-dev": "vendor/bin/phpstan --ansi analyse --configuration phpstan.neon",
-		"phpunit-dev": "php vendor/phpunit/phpunit/phpunit --colors=always --verbose",
+		"phpunit-dev": "php vendor/phpunit/phpunit/phpunit --colors=always --testdox",
 		"test": [
 			"@lint",
 			"@phpcs",
