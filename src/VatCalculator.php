@@ -17,27 +17,16 @@ class VatCalculator
 	/**
 	 * VAT Service check URL provided by the EU.
 	 */
-	public const VAT_SERVICE_URL = 'https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
+	public const string VAT_SERVICE_URL = 'https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
 
-	/** @var SoapClient */
-	private $soapClient;
-
-	/** @var VatRates */
-	private $vatRates;
-
-	/** @var string */
-	private $businessCountryCode;
-
-	/** @var string */
-	private $businessVatNumber;
-
-	/** @var float */
-	private $timeout;
+	private SoapClient $soapClient;
+	private ?string $businessCountryCode = null;
+	private ?string $businessVatNumber = null;
+	private float $timeout;
 
 
-	public function __construct(VatRates $vatRates, ?string $businessCountryCode = null, ?string $businessVatNumber = null, ?float $timeout = null)
+	public function __construct(private readonly VatRates $vatRates, ?string $businessCountryCode = null, ?string $businessVatNumber = null, ?float $timeout = null)
 	{
-		$this->vatRates = $vatRates;
 		if ($businessCountryCode) {
 			$this->setBusinessCountryCode($businessCountryCode);
 		}

@@ -9,7 +9,7 @@ class InvalidCharsInVatNumberException extends VatNumberException
 {
 
 	/** @var array<int, string> */
-	private $invalidChars = [];
+	private array $invalidChars = [];
 
 
 	/**

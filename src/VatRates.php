@@ -13,16 +13,16 @@ use JakubJachym\VatCalculator\Exceptions\NoVatRulesForCountryException;
  */
 class VatRates
 {
-	public const GENERAL = null;
-	public const STANDARD_RATE = "standard";
-	public const REDUCED_RATE = "reduced";
-	public const REDUCED_2ND_RATE = "reduced-second";
-	public const SUPER_REDUCED_RATE = "super-reduced";
-	public const PARKING_RATE = "parking";
+	public const null GENERAL = null;
+	public const string STANDARD_RATE = "standard";
+	public const string REDUCED_RATE = "reduced";
+	public const string REDUCED_2ND_RATE = "reduced-second";
+	public const string SUPER_REDUCED_RATE = "super-reduced";
+	public const string PARKING_RATE = "parking";
 
 	// Kept for backwards compatibility
-	public const HIGH = self::STANDARD_RATE;
-	public const LOW = self::REDUCED_RATE;
+	public const string HIGH = self::STANDARD_RATE;
+	public const string LOW = self::REDUCED_RATE;
 
 	/**
 	 * All available tax rules and their exceptions.
@@ -31,7 +31,7 @@ class VatRates
 	 *
 	 * @var array<string, CountryTaxRules>
 	 */
-	private $taxRules = [
+	private array $taxRules = [
 		'AT' => [ // Austria - https://www.wko.at/steuern/umsatzsteuer-ueberblick-tabelle#heading_Steuers_tze
 			'rate' => 0.20,
 			'rates' => [
@@ -328,7 +328,7 @@ class VatRates
 	 *
 	 * @var array<string, CountryTaxRules>
 	 */
-	private $optionalTaxRules = [
+	private array $optionalTaxRules = [
 		'CH' => [ // Switzerland
 			'rate' => 0.081,
 			'since' => [
@@ -371,7 +371,7 @@ class VatRates
 	 *
 	 * @var PostalCodeTaxExceptions
 	 */
-	private $postalCodeExceptions = [
+	private array $postalCodeExceptions = [
 		'AT' => [
 			[
 				'postalCode' => '/^6691$/',
@@ -507,7 +507,7 @@ class VatRates
 	 *
 	 * @var PostalCodeTaxExceptions
 	 */
-	private $optionalPostalCodeExceptions = [
+	private array $optionalPostalCodeExceptions = [
 		'GB' => [
 			// Akrotiri
 			[
@@ -523,7 +523,7 @@ class VatRates
 	];
 
 	/** @var DateTimeImmutable */
-	private $now;
+	private DateTimeImmutable $now;
 
 
 	public function __construct()
@@ -540,7 +540,7 @@ class VatRates
 	{
 		$country = strtoupper($country);
 		if (!isset($this->optionalTaxRules[$country])) {
-			throw new NoVatRulesForCountryException("No optional tax rules specified for {$country}");
+			throw new NoVatRulesForCountryException("No optional tax rules specified for $country");
 		}
 		$this->taxRules[$country] = $this->optionalTaxRules[$country];
 		if (isset($this->optionalPostalCodeExceptions[$country])) {

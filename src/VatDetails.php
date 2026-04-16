@@ -6,25 +6,8 @@ namespace JakubJachym\VatCalculator;
 class VatDetails
 {
 
-	/** @var bool */
-	private $valid;
-
-	/** @var string */
-	private $countryCode;
-
-	/** @var string */
-	private $vatNumber;
-
-	/** @var string|null */
-	private $requestId;
-
-
-	public function __construct(bool $valid, string $countryCode, string $vatNumber, ?string $requestId)
+	public function __construct(private bool $valid, private string $countryCode, private string $vatNumber, private ?string $requestId)
 	{
-		$this->valid = $valid;
-		$this->countryCode = $countryCode;
-		$this->vatNumber = $vatNumber;
-		$this->requestId = $requestId;
 	}
 
 

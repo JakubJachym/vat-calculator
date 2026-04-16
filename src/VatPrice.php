@@ -6,25 +6,8 @@ namespace JakubJachym\VatCalculator;
 class VatPrice
 {
 
-	/** @var float */
-	private $netPrice;
-
-	/** @var float */
-	private $price;
-
-	/** @var float */
-	private $taxValue;
-
-	/** @var float */
-	private $taxRate;
-
-
-	public function __construct(float $netPrice, float $price, float $taxValue, float $taxRate)
+	public function __construct(private readonly float $netPrice, private readonly float $price, private readonly float $taxValue, private readonly float $taxRate)
 	{
-		$this->netPrice = $netPrice;
-		$this->price = $price;
-		$this->taxValue = $taxValue;
-		$this->taxRate = $taxRate;
 	}
 
 

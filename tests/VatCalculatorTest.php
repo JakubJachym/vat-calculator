@@ -16,16 +16,11 @@ use stdClass;
 class VatCalculatorTest extends TestCase
 {
 
-	private const DATE = '2020-06-30 23:59:59 Europe/Berlin';
+	private const string DATE = '2026-06-30 23:59:59 Europe/Berlin';
 
-	/** @var VatCalculator */
-	private $vatCalculator;
-
-	/** @var SoapClient */
-	private $vatCheck;
-
-	/** @var VatRates */
-	private $vatRates;
+	private VatCalculator $vatCalculator;
+	private SoapClient $vatCheck;
+	private VatRates $vatRates;
 
 
 	protected function setUp(): void

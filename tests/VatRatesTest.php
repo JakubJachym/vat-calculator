@@ -11,8 +11,7 @@ use ReflectionClass;
 class VatRatesTest extends TestCase
 {
 
-	/** @var VatRates */
-	private $vatRates;
+	private VatRates $vatRates;
 
 
 	protected function setUp(): void
