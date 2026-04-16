@@ -9,7 +9,6 @@ use JakubJachym\VatCalculator\Exceptions\UnsupportedCountryException;
 use JakubJachym\VatCalculator\Exceptions\VatCheckUnavailableException;
 use SoapClient;
 use SoapFault;
-use stdClass;
 
 class VatCalculator
 {
@@ -164,7 +163,12 @@ class VatCalculator
 				$requesterVatNumber = $this->businessVatNumber;
 			}
 
-			/** @var stdClass $result */
+			/** @var object{
+					valid: bool,
+					countryCode: string,
+					vatNumber: string,
+					requestIdentifier: string|null
+				} $result */
 			$result = $this->soapClient->checkVatApprox([
 				'countryCode' => $countryCode,
 				'vatNumber' => $vatNumber,
