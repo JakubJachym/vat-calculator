@@ -583,7 +583,14 @@ class VatRates
 				}
 				if (isset($postalCodeException['name'], $this->taxRules[$postalCodeException['code']]['exceptions'])) {
 					$rules = $this->taxRules[$postalCodeException['code']]['exceptions'][$postalCodeException['name']];
-					return is_array($rules) ? $rules[$type] : $rules;
+					if (!is_array($rules)) {
+						return $rules;
+					}
+					if ($type !== VatRates::GENERAL && isset($rules['rates'][$type]) && is_float($rules['rates'][$type])) {
+						return $rules['rates'][$type];
+					}
+
+					return $rules['rate'];
 				}
 				return $this->getRules($postalCodeException['code'], $date)['rate'];
 			}
