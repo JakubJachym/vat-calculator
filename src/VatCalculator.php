@@ -22,10 +22,9 @@ class VatCalculator
 	private SoapClient $soapClient;
 	private ?string $businessCountryCode = null;
 	private ?string $businessVatNumber = null;
-	private float $timeout;
 
 
-	public function __construct(private readonly VatRates $vatRates, ?string $businessCountryCode = null, ?string $businessVatNumber = null, ?float $timeout = null)
+	public function __construct(private readonly VatRates $vatRates, ?string $businessCountryCode = null, ?string $businessVatNumber = null)
 	{
 		if ($businessCountryCode) {
 			$this->setBusinessCountryCode($businessCountryCode);
@@ -33,7 +32,6 @@ class VatCalculator
 		if ($businessVatNumber) {
 			$this->setBusinessVatNumber($businessVatNumber);
 		}
-		$this->timeout = $timeout ?? (float)ini_get('default_socket_timeout');
 	}
 
 
@@ -162,18 +160,6 @@ class VatCalculator
 		}
 
 		try {
-			if ($this->soapClient === null) {
-				$this->soapClient = new SoapClient(
-					self::VAT_SERVICE_URL,
-					[
-						'stream_context' => stream_context_create([
-							'http' => [
-								'timeout' => $this->timeout,
-							],
-						]),
-					],
-				);
-			}
 			if ($requesterVatNumber === null) {
 				$requesterVatNumber = $this->businessVatNumber;
 			}
