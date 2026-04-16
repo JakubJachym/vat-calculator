@@ -32,25 +32,13 @@ class VatRates
 	 * @var array<string, CountryTaxRules>
 	 */
 	private $taxRules = [
-		'AT' => [ // Austria
+		'AT' => [ // Austria - https://www.wko.at/steuern/umsatzsteuer-ueberblick-tabelle#heading_Steuers_tze
 			'rate' => 0.20,
 			'rates' => [
 				self::STANDARD_RATE => 0.20,
 				self::REDUCED_RATE => 0.10,
 				self::REDUCED_2ND_RATE => 0.13,
-				self::SUPER_REDUCED_RATE => 0.05,
 				self::PARKING_RATE => 0.13,
-			],
-			'since' => [
-				'2022-01-01 00:00:00 Europe/Vienna' => [
-					'rate' => 0.20,
-					'rates' => [
-						self::STANDARD_RATE => 0.20,
-						self::REDUCED_RATE => 0.10,
-						self::REDUCED_2ND_RATE => 0.13,
-						self::PARKING_RATE => 0.13,
-					],
-				],
 			],
 			'exceptions' => [
 				'Jungholz' => 0.19,
@@ -114,18 +102,12 @@ class VatRates
 		'DK' => [ // Denmark
 			'rate' => 0.25,
 		],
-		'EE' => [ // Estonia
-			'rate' => 0.20,
-			'since' => [
-				'2024-01-01 00:00:00 Europe/Tallinn' => [
-					'rate' => 0.22,
-					'rates' => [
-						self::STANDARD_RATE => 0.22,
-						self::REDUCED_RATE => 0.09,
-						self::REDUCED_2ND_RATE => 0.05,
-					],
-
-				],
+		'EE' => [ // Estonia - https://www.emta.ee/en/business-client/taxes-and-payment/value-added-tax/vat-rates-and-supply-exempt-tax
+			'rate' => 0.24,
+			'rates' => [
+				self::STANDARD_RATE => 0.24,
+				self::REDUCED_RATE => 0.13,
+				self::REDUCED_2ND_RATE => 0.09,
 			],
 		],
 		'EL' => [ // Hellenic Republic (Greece)
@@ -139,13 +121,12 @@ class VatRates
 				'Mount Athos' => 0,
 			],
 		],
-		'ES' => [ // Spain
+		'ES' => [ // Spain - https://administracion.gob.es/pag_Home/en/Tu-espacio-europeo/derechos-obligaciones/empresas/impuestos/IVA/tipos-exenciones.html
 			'rate' => 0.21,
 			'rates' => [
 				self::STANDARD_RATE => 0.21,
 				self::REDUCED_RATE => 0.10,
-				self::REDUCED_2ND_RATE => 0.05,
-				self::SUPER_REDUCED_RATE => 0.04,
+				self::REDUCED_2ND_RATE => 0.04,
 			],
 			'exceptions' => [
 				'Canary Islands' => 0,
@@ -153,22 +134,12 @@ class VatRates
 				'Melilla' => 0,
 			],
 		],
-		'FI' => [ // Finland
-			'rate' => 0.24,
+		'FI' => [ // Finland - https://vm.fi/en/value-added-tax
+			'rate' => 0.255,
 			'rates' => [
-				self::STANDARD_RATE => 0.24,
-				self::REDUCED_RATE => 0.10,
-				self::REDUCED_2ND_RATE => 0.14,
-			],
-			'since' => [
-				'2024-09-01 00:00:00 Europe/Helsinki' => [
-					'rate' => 0.255,
-					'rates' => [
-						self::STANDARD_RATE => 0.255,
-						self::REDUCED_RATE => 0.10,
-						self::REDUCED_2ND_RATE => 0.14,
-					],
-				],
+				self::STANDARD_RATE => 0.255,
+				self::REDUCED_RATE => 0.135,
+				self::REDUCED_2ND_RATE => 0.10,
 			],
 		],
 		'FR' => [ // France
@@ -301,7 +272,11 @@ class VatRates
 			],
 		],
 		'RO' => [ // Romania
-			'rate' => 0.19,
+			'rate' => 0.21,
+			'rates' => [
+				self::STANDARD_RATE => 0.21,
+				self::REDUCED_RATE => 0.11,
+			],
 		],
 		'SE' => [ // Sweden
 			'rate' => 0.25,
