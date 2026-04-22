@@ -8,21 +8,37 @@ use DateTimeInterface;
 use JakubJachym\VatCalculator\Exceptions\NoVatRulesForCountryException;
 
 /**
- * @phpstan-type CountryTaxRules array{rate: float, rates?: array<string, float>, exceptions?: array<string, float|array<string|null, float>>, since?: array<string, array{rate: float, rates?: array<string, float>}>}
- * @phpstan-type PostalCodeTaxExceptions array<string, array<int, array{postalCode: string, code: string, name?: string, city?: string}>>
+ * @phpstan-type CountryTaxRules array{
+ *     rate: float,
+ *     rates?: array<string, float>,
+ *     exceptions?: array<string, float|array{
+ *         rate: float,
+ *         rates?: array<string, float>
+ *     }>,
+ *     since?: array<string, array{
+ *         rate: float,
+ *         rates?: array<string, float>
+ *     }>
+ * }
+ * @phpstan-type PostalCodeTaxExceptions array<string, array<int, array{
+ *     postalCode: string,
+ *     code: string,
+ *     name?: string,
+ *     city?: string
+ * }>>
  */
 class VatRates
 {
-	public const GENERAL = null;
-	public const STANDARD_RATE = "standard";
-	public const REDUCED_RATE = "reduced";
-	public const REDUCED_2ND_RATE = "reduced-second";
-	public const SUPER_REDUCED_RATE = "super-reduced";
-	public const PARKING_RATE = "parking";
+	public const null GENERAL = null;
+	public const string STANDARD_RATE = "standard";
+	public const string REDUCED_RATE = "reduced";
+	public const string REDUCED_2ND_RATE = "reduced-second";
+	public const string SUPER_REDUCED_RATE = "super-reduced";
+	public const string PARKING_RATE = "parking";
 
 	// Kept for backwards compatibility
-	public const HIGH = self::STANDARD_RATE;
-	public const LOW = self::REDUCED_RATE;
+	public const string HIGH = self::STANDARD_RATE;
+	public const string LOW = self::REDUCED_RATE;
 
 	/**
 	 * All available tax rules and their exceptions.
@@ -31,26 +47,14 @@ class VatRates
 	 *
 	 * @var array<string, CountryTaxRules>
 	 */
-	private $taxRules = [
-		'AT' => [ // Austria
+	private array $taxRules = [
+		'AT' => [ // Austria - https://www.wko.at/steuern/umsatzsteuer-ueberblick-tabelle#heading_Steuers_tze
 			'rate' => 0.20,
 			'rates' => [
 				self::STANDARD_RATE => 0.20,
 				self::REDUCED_RATE => 0.10,
 				self::REDUCED_2ND_RATE => 0.13,
-				self::SUPER_REDUCED_RATE => 0.05,
 				self::PARKING_RATE => 0.13,
-			],
-			'since' => [
-				'2022-01-01 00:00:00 Europe/Vienna' => [
-					'rate' => 0.20,
-					'rates' => [
-						self::STANDARD_RATE => 0.20,
-						self::REDUCED_RATE => 0.10,
-						self::REDUCED_2ND_RATE => 0.13,
-						self::PARKING_RATE => 0.13,
-					],
-				],
 			],
 			'exceptions' => [
 				'Jungholz' => 0.19,
@@ -82,29 +86,16 @@ class VatRates
 		],
 		'CZ' => [ // Czech Republic
 			'rate' => 0.21,
-			'since' => [
-				'2024-01-01 00:00:00 Europe/Prague' => [
-					'rate' => 0.21,
-					'rates' => [
-						self::STANDARD_RATE => 0.21,
-						self::REDUCED_RATE => 0.12,
-					],
-				],
+			'rates' => [
+				self::STANDARD_RATE => 0.21,
+				self::REDUCED_RATE => 0.12,
 			],
 		],
 		'DE' => [ // Germany
 			'rate' => 0.19,
-			'since' => [
-				'2021-01-01 00:00:00 Europe/Berlin' => [
-					'rate' => 0.19,
-					'rates' => [
-						self::STANDARD_RATE => 0.19,
-						self::REDUCED_RATE => 0.07,
-					],
-				],
-				'2020-07-01 00:00:00 Europe/Berlin' => [
-					'rate' => 0.16,
-				],
+			'rates' => [
+				self::STANDARD_RATE => 0.19,
+				self::REDUCED_RATE => 0.07,
 			],
 			'exceptions' => [
 				'Heligoland' => 0,
@@ -114,18 +105,12 @@ class VatRates
 		'DK' => [ // Denmark
 			'rate' => 0.25,
 		],
-		'EE' => [ // Estonia
-			'rate' => 0.20,
-			'since' => [
-				'2024-01-01 00:00:00 Europe/Tallinn' => [
-					'rate' => 0.22,
-					'rates' => [
-						self::STANDARD_RATE => 0.22,
-						self::REDUCED_RATE => 0.09,
-						self::REDUCED_2ND_RATE => 0.05,
-					],
-
-				],
+		'EE' => [ // Estonia - https://www.emta.ee/en/business-client/taxes-and-payment/value-added-tax/vat-rates-and-supply-exempt-tax
+			'rate' => 0.24,
+			'rates' => [
+				self::STANDARD_RATE => 0.24,
+				self::REDUCED_RATE => 0.13,
+				self::REDUCED_2ND_RATE => 0.09,
 			],
 		],
 		'EL' => [ // Hellenic Republic (Greece)
@@ -139,12 +124,11 @@ class VatRates
 				'Mount Athos' => 0,
 			],
 		],
-		'ES' => [ // Spain
+		'ES' => [ // Spain - https://administracion.gob.es/pag_Home/en/Tu-espacio-europeo/derechos-obligaciones/empresas/impuestos/IVA/tipos-exenciones.html
 			'rate' => 0.21,
 			'rates' => [
 				self::STANDARD_RATE => 0.21,
 				self::REDUCED_RATE => 0.10,
-				self::REDUCED_2ND_RATE => 0.05,
 				self::SUPER_REDUCED_RATE => 0.04,
 			],
 			'exceptions' => [
@@ -153,22 +137,12 @@ class VatRates
 				'Melilla' => 0,
 			],
 		],
-		'FI' => [ // Finland
-			'rate' => 0.24,
+		'FI' => [ // Finland - https://vm.fi/en/value-added-tax
+			'rate' => 0.255,
 			'rates' => [
-				self::STANDARD_RATE => 0.24,
-				self::REDUCED_RATE => 0.10,
-				self::REDUCED_2ND_RATE => 0.14,
-			],
-			'since' => [
-				'2024-09-01 00:00:00 Europe/Helsinki' => [
-					'rate' => 0.255,
-					'rates' => [
-						self::STANDARD_RATE => 0.255,
-						self::REDUCED_RATE => 0.10,
-						self::REDUCED_2ND_RATE => 0.14,
-					],
-				],
+				self::STANDARD_RATE => 0.255,
+				self::REDUCED_RATE => 0.135,
+				self::REDUCED_2ND_RATE => 0.10,
 			],
 		],
 		'FR' => [ // France
@@ -217,19 +191,11 @@ class VatRates
 		],
 		'IE' => [ // Ireland
 			'rate' => 0.23,
-			'since' => [
-				'2021-03-01 00:00:00 Europe/Dublin' => [
-					'rate' => 0.23,
-					'rates' => [
-						self::STANDARD_RATE => 0.23,
-						self::REDUCED_RATE => 0.135,
-						self::REDUCED_2ND_RATE => 0.09,
-						self::SUPER_REDUCED_RATE => 0.048,
-					],
-				],
-				'2020-09-01 00:00:00 Europe/Dublin' => [
-					'rate' => 0.21,
-				],
+			'rates' => [
+				self::STANDARD_RATE => 0.23,
+				self::REDUCED_RATE => 0.135,
+				self::REDUCED_2ND_RATE => 0.09,
+				self::SUPER_REDUCED_RATE => 0.048,
 			],
 		],
 		'IT' => [ // Italy
@@ -255,33 +221,29 @@ class VatRates
 		],
 		'LU' => [ // Luxembourg
 			'rate' => 0.17,
-			'since' => [
-				'2024-01-01 00:00:00 Europe/Luxembourg' => [
-					'rate' => 0.17,
-					'rates' => [
-						self::STANDARD_RATE => 0.17,
-						self::REDUCED_RATE => 0.08,
-						self::SUPER_REDUCED_RATE => 0.03,
-						self::PARKING_RATE => 0.14,
-					],
-				],
-				// https://legilux.public.lu/eli/etat/leg/loi/2022/10/26/a534/jo
-				'2023-01-01 00:00:00 Europe/Luxembourg' => [
-					'rate' => 0.16,
-					'rates' => [
-						self::STANDARD_RATE => 0.16,
-						self::REDUCED_RATE => 0.07,
-						self::SUPER_REDUCED_RATE => 0.03,
-						self::PARKING_RATE => 0.13,
-					],
-				],
+			'rates' => [
+				self::STANDARD_RATE => 0.17,
+				self::REDUCED_RATE => 0.08,
+				self::SUPER_REDUCED_RATE => 0.03,
+				self::PARKING_RATE => 0.14,
 			],
 		],
 		'LV' => [ // Latvia
 			'rate' => 0.21,
+			'rates' => [
+				self::STANDARD_RATE => 0.21,
+				self::REDUCED_RATE => 0.12,
+				self::REDUCED_2ND_RATE => 0.05,
+			],
 		],
-		'MT' => [ // Malta
+		'MT' => [ // Malta - https://mtca.gov.mt/business-tax/vat1/vat-compliance/vat-rates/vat-rates
 			'rate' => 0.18,
+			'rates' => [
+				self::STANDARD_RATE => 0.18,
+				self::REDUCED_RATE => 0.12,
+				self::REDUCED_2ND_RATE => 0.07,
+				self::SUPER_REDUCED_RATE => 0.05,
+			],
 		],
 		'NL' => [ // Netherlands
 			'rate' => 0.21,
@@ -290,49 +252,69 @@ class VatRates
 				self::REDUCED_RATE => 0.09,
 			],
 		],
-		'PL' => [ // Poland
+		'PL' => [ // Poland - https://www.biznes.gov.pl/en/portal/004162#3
 			'rate' => 0.23,
+			'rates' => [
+				self::STANDARD_RATE => 0.23,
+				self::REDUCED_RATE => 0.08,
+				self::REDUCED_2ND_RATE => 0.05,
+			],
 		],
-		'PT' => [ // Portugal
+		'PT' => [ // Portugal - https://www2.gov.pt/en/cidadaos-europeus-viajar-viver-e-fazer-negocios-em-portugal/impostos-para-atividades-economicas-em-portugal/imposto-sobre-valor-acrescentado-iva-em-portugal
 			'rate' => 0.23,
+			'rates' => [
+				self::STANDARD_RATE => 0.23,
+				self::REDUCED_RATE => 0.13,
+				self::REDUCED_2ND_RATE => 0.06,
+			],
 			'exceptions' => [
-				'Azores' => 0.16,
-				'Madeira' => 0.22,
+				'Azores' => [
+					'rate' => 0.16,
+					'rates' => [
+						self::STANDARD_RATE => 0.16,
+						self::REDUCED_RATE => 0.09,
+						self::REDUCED_2ND_RATE => 0.04,
+					],
+				],
+				'Madeira' => [
+					'rate' => 0.22,
+					'rates' => [
+						self::STANDARD_RATE => 0.22,
+						self::REDUCED_RATE => 0.12,
+						self::REDUCED_2ND_RATE => 0.05,
+					],
+				],
 			],
 		],
 		'RO' => [ // Romania
-			'rate' => 0.19,
-		],
-		'SE' => [ // Sweden
-			'rate' => 0.25,
-		],
-		'SI' => [ // Slovenia
-			'rate' => 0.22,
-		],
-		'SK' => [ // Slovakia
-			'rate' => 0.20,
+			'rate' => 0.21,
 			'rates' => [
-				self::STANDARD_RATE => 0.20,
-				self::REDUCED_RATE => 0.10,
+				self::STANDARD_RATE => 0.21,
+				self::REDUCED_RATE => 0.11,
+			],
+		],
+		'SE' => [ // Sweden - https://verksamt.se/en/taxes-contributions/vat/vat-rates
+			'rate' => 0.25,
+			'rates' => [
+				self::STANDARD_RATE => 0.25,
+				self::REDUCED_RATE => 0.12,
+				self::REDUCED_2ND_RATE => 0.06,
+			],
+		],
+		'SI' => [ // Slovenia - https://spot.gov.si/en/info/taxes/value-added-tax-vat
+			'rate' => 0.22,
+			'rates' => [
+				self::STANDARD_RATE => 0.22,
+				self::REDUCED_RATE => 0.095,
 				self::REDUCED_2ND_RATE => 0.05,
 			],
-			'since' => [
-				'2025-01-01 00:00:00 Europe/Bratislava' => [
-					'rate' => 0.23,
-					'rates' => [
-						self::STANDARD_RATE => 0.23,
-						self::REDUCED_RATE => 0.19,
-						self::REDUCED_2ND_RATE => 0.05,
-					],
-				],
-				'2024-01-01 00:00:00 Europe/Bratislava' => [
-					'rate' => 0.20,
-					'rates' => [
-						self::STANDARD_RATE => 0.20,
-						self::REDUCED_RATE => 0.10,
-						self::REDUCED_2ND_RATE => 0.05,
-					],
-				],
+		],
+		'SK' => [ // Slovakia
+			'rate' => 0.23,
+			'rates' => [
+				self::STANDARD_RATE => 0.23,
+				self::REDUCED_RATE => 0.19,
+				self::REDUCED_2ND_RATE => 0.05,
 			],
 		],
 
@@ -353,30 +335,21 @@ class VatRates
 	 *
 	 * @var array<string, CountryTaxRules>
 	 */
-	private $optionalTaxRules = [
+	private array $optionalTaxRules = [
 		'CH' => [ // Switzerland
 			'rate' => 0.081,
-			'since' => [
-				'2024-01-01 00:00:00 Europe/Zurich' => [
-					'rate' => 0.081,
-					'rates' => [
-						self::STANDARD_RATE => 0.081,
-						self::REDUCED_RATE => 0.026,
-						self::SUPER_REDUCED_RATE => 0.038,
-					],
-				],
-				'2018-01-01 00:00:00 Europe/Zurich' => [
-					'rate' => 0.077,
-					'rates' => [
-						self::STANDARD_RATE => 0.077,
-						self::REDUCED_RATE => 0.025,
-						self::SUPER_REDUCED_RATE => 0.037,
-					],
-				],
+			'rates' => [
+				self::STANDARD_RATE => 0.081,
+				self::REDUCED_RATE => 0.026,
+				self::SUPER_REDUCED_RATE => 0.038,
 			],
 		],
 		'GB' => [ // United Kingdom
 			'rate' => 0.20,
+			'rates' => [
+				self::STANDARD_RATE => 0.20,
+				self::REDUCED_RATE => 0.05,
+			],
 			'exceptions' => [
 				// UK RAF Bases in Cyprus are taxed at Cyprus rate
 				'Akrotiri' => 0.19,
@@ -385,9 +358,19 @@ class VatRates
 		],
 		'NO' => [ // Norway
 			'rate' => 0.25,
+			'rates' => [
+				self::STANDARD_RATE => 0.25,
+				self::REDUCED_RATE => 0.15,
+				self::REDUCED_2ND_RATE => 0.12,
+			],
 		],
 		'TR' => [ // Turkey
-			'rate' => 0.18,
+			'rate' => 0.20,
+			'rates' => [
+				self::STANDARD_RATE => 0.20,
+				self::REDUCED_RATE => 0.10,
+				self::REDUCED_2ND_RATE => 0.01,
+			],
 		],
 	];
 
@@ -396,7 +379,7 @@ class VatRates
 	 *
 	 * @var PostalCodeTaxExceptions
 	 */
-	private $postalCodeExceptions = [
+	private array $postalCodeExceptions = [
 		'AT' => [
 			[
 				'postalCode' => '/^6691$/',
@@ -512,12 +495,12 @@ class VatRates
 		],
 		'PT' => [
 			[
-				'postalCode' => '/^9[0-4]\d{2,}$/',
+				'postalCode' => '/^9[0-4]\d{2}($|-\d{3}$)/',
 				'code' => 'PT',
 				'name' => 'Madeira',
 			],
 			[
-				'postalCode' => '/^9[5-9]\d{2,}$/',
+				'postalCode' => '/^9[5-9]\d{2}($|-\d{3}$)/',
 				'code' => 'PT',
 				'name' => 'Azores',
 			],
@@ -532,7 +515,7 @@ class VatRates
 	 *
 	 * @var PostalCodeTaxExceptions
 	 */
-	private $optionalPostalCodeExceptions = [
+	private array $optionalPostalCodeExceptions = [
 		'GB' => [
 			// Akrotiri
 			[
@@ -548,7 +531,7 @@ class VatRates
 	];
 
 	/** @var DateTimeImmutable */
-	private $now;
+	private DateTimeImmutable $now;
 
 
 	public function __construct()
@@ -565,7 +548,7 @@ class VatRates
 	{
 		$country = strtoupper($country);
 		if (!isset($this->optionalTaxRules[$country])) {
-			throw new NoVatRulesForCountryException("No optional tax rules specified for {$country}");
+			throw new NoVatRulesForCountryException("No optional tax rules specified for $country");
 		}
 		$this->taxRules[$country] = $this->optionalTaxRules[$country];
 		if (isset($this->optionalPostalCodeExceptions[$country])) {
@@ -608,7 +591,14 @@ class VatRates
 				}
 				if (isset($postalCodeException['name'], $this->taxRules[$postalCodeException['code']]['exceptions'])) {
 					$rules = $this->taxRules[$postalCodeException['code']]['exceptions'][$postalCodeException['name']];
-					return is_array($rules) ? $rules[$type] : $rules;
+					if (!is_array($rules)) {
+						return $rules;
+					}
+					if ($type !== VatRates::GENERAL && isset($rules['rates'][$type])) {
+						return $rules['rates'][$type];
+					}
+
+					return $rules['rate'];
 				}
 				return $this->getRules($postalCodeException['code'], $date)['rate'];
 			}
@@ -685,7 +675,11 @@ class VatRates
 		if (isset($taxRules['exceptions'])) {
 			foreach ($taxRules['exceptions'] as $exceptions) {
 				foreach ((array)$exceptions as $exception) {
-					$rates[] = $exception;
+					if (is_array($exception)) {
+						$rates = array_merge($rates, array_values($exception));
+					} else {
+						$rates[] = $exception;
+					}
 				}
 			}
 		}

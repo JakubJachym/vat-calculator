@@ -19,15 +19,15 @@
 		}
 	],
 	"require": {
-		"php": "^7.3 || ^8.0",
+		"php": "^8.3",
 		"ext-soap": "*"
 	},
 	"require-dev": {
 		"php-parallel-lint/php-parallel-lint": "^1.2",
 		"php-parallel-lint/php-console-highlighter": "^1.0",
-		"phpstan/phpstan": "^1.3",
-		"phpunit/php-timer": "^5.0",
-		"phpunit/phpunit": "^9.4",
+		"phpstan/phpstan": "^2.1",
+		"phpunit/php-timer": "^7.0",
+		"phpunit/phpunit": "^11.5",
 		"spaze/coding-standard": "^1.3"
 	},
 	"autoload": {
@@ -46,7 +46,7 @@
 		"lint": "vendor/bin/parallel-lint --colors src/ tests/",
 		"phpcs": "vendor/bin/phpcs src/ tests/",
 		"phpstan-dev": "vendor/bin/phpstan --ansi analyse --configuration phpstan.neon",
-		"phpunit-dev": "php vendor/phpunit/phpunit/phpunit --colors=always --verbose",
+		"phpunit-dev": "php vendor/phpunit/phpunit/phpunit --colors=always --testdox",
 		"test": [
 			"@lint",
 			"@phpcs",

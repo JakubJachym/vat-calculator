@@ -11,8 +11,7 @@ use ReflectionClass;
 class VatRatesTest extends TestCase
 {
 
-	/** @var VatRates */
-	private $vatRates;
+	private VatRates $vatRates;
 
 
 	protected function setUp(): void
@@ -55,11 +54,6 @@ class VatRatesTest extends TestCase
 		$this->assertEquals(0.19, $this->vatRates->getTaxRateForLocation('DE', null));
 		$this->assertEquals(0.19, $this->vatRates->getTaxRateForLocation('DE', null, VatRates::GENERAL, new DateTimeImmutable($date)));
 
-		$date = '2020-07-01 00:00:00 Europe/Berlin';
-		$property->setValue($this->vatRates, new DateTimeImmutable($date));
-		$this->assertEquals(0.16, $this->vatRates->getTaxRateForLocation('DE', null));
-		$this->assertEquals(0.16, $this->vatRates->getTaxRateForLocation('DE', null, VatRates::GENERAL, new DateTimeImmutable($date)));
-
 		$date = '2021-01-01 00:00:00 Europe/Berlin';
 		$property->setValue($this->vatRates, new DateTimeImmutable($date));
 		$this->assertEquals(0.19, $this->vatRates->getTaxRateForLocation('DE', null));
@@ -70,6 +64,14 @@ class VatRatesTest extends TestCase
 	public function testGetRatesExceptionsItLivigno(): void
 	{
 		$this->assertEquals(0, $this->vatRates->getTaxRateForLocation('IT', '23041'));
+	}
+
+
+	public function testGetRatesExceptionsPtMadeira(): void
+	{
+		$this->assertEquals(0.22, $this->vatRates->getTaxRateForLocation('PT', '9000-059', VatRates::STANDARD_RATE));
+		$this->assertEquals(0.12, $this->vatRates->getTaxRateForLocation('PT', '9000-059', VatRates::REDUCED_RATE));
+		$this->assertEquals(0.05, $this->vatRates->getTaxRateForLocation('PT', '9000-059', VatRates::REDUCED_2ND_RATE));
 	}
 
 
@@ -85,9 +87,9 @@ class VatRatesTest extends TestCase
 
 	public function testGetAllKnownRates(): void
 	{
-		$this->assertEquals([0.20, 0.10, 0.13, 0.05, 0.19], $this->vatRates->getAllKnownRates('AT'));
+		$this->assertEquals([0.20, 0.10, 0.13, 0.19], $this->vatRates->getAllKnownRates('AT'));
 		$this->assertEquals([0.21, 0.12], $this->vatRates->getAllKnownRates('CZ'));
-		$this->assertEquals([0.19, 0, 0.07, 0.16], $this->vatRates->getAllKnownRates('DE'));
+		$this->assertEquals([0.19, 0.07, 0], $this->vatRates->getAllKnownRates('DE'));
 		$this->assertEquals([0.21, 0.09], $this->vatRates->getAllKnownRates('NL'));
 	}
 

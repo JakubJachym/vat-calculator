@@ -9,7 +9,6 @@ use JakubJachym\VatCalculator\Exceptions\UnsupportedCountryException;
 use JakubJachym\VatCalculator\Exceptions\VatCheckUnavailableException;
 use SoapClient;
 use SoapFault;
-use stdClass;
 
 class VatCalculator
 {
@@ -17,34 +16,21 @@ class VatCalculator
 	/**
 	 * VAT Service check URL provided by the EU.
 	 */
-	public const VAT_SERVICE_URL = 'https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
+	public const string VAT_SERVICE_URL = 'https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
 
-	/** @var SoapClient */
-	private $soapClient;
-
-	/** @var VatRates */
-	private $vatRates;
-
-	/** @var string */
-	private $businessCountryCode;
-
-	/** @var string */
-	private $businessVatNumber;
-
-	/** @var float */
-	private $timeout;
+	private SoapClient $soapClient;
+	private ?string $businessCountryCode = null;
+	private ?string $businessVatNumber = null;
 
 
-	public function __construct(VatRates $vatRates, ?string $businessCountryCode = null, ?string $businessVatNumber = null, ?float $timeout = null)
+	public function __construct(private readonly VatRates $vatRates, ?string $businessCountryCode = null, ?string $businessVatNumber = null)
 	{
-		$this->vatRates = $vatRates;
 		if ($businessCountryCode) {
 			$this->setBusinessCountryCode($businessCountryCode);
 		}
 		if ($businessVatNumber) {
 			$this->setBusinessVatNumber($businessVatNumber);
 		}
-		$this->timeout = $timeout ?? (float)ini_get('default_socket_timeout');
 	}
 
 
@@ -173,23 +159,16 @@ class VatCalculator
 		}
 
 		try {
-			if ($this->soapClient === null) {
-				$this->soapClient = new SoapClient(
-					self::VAT_SERVICE_URL,
-					[
-						'stream_context' => stream_context_create([
-							'http' => [
-								'timeout' => $this->timeout,
-							],
-						]),
-					],
-				);
-			}
 			if ($requesterVatNumber === null) {
 				$requesterVatNumber = $this->businessVatNumber;
 			}
 
-			/** @var stdClass $result */
+			/** @var object{
+					valid: bool,
+					countryCode: string,
+					vatNumber: string,
+					requestIdentifier: string|null
+				} $result */
 			$result = $this->soapClient->checkVatApprox([
 				'countryCode' => $countryCode,
 				'vatNumber' => $vatNumber,
