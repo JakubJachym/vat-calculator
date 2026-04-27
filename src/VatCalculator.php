@@ -23,8 +23,26 @@ class VatCalculator
 	private ?string $businessVatNumber = null;
 
 
+	/**
+	 * @throws VatCheckUnavailableException
+	 */
 	public function __construct(private readonly VatRates $vatRates, ?string $businessCountryCode = null, ?string $businessVatNumber = null)
 	{
+		try {
+			$this->soapClient = new SoapClient(
+				self::VAT_SERVICE_URL,
+				[
+					'stream_context' => stream_context_create([
+						'http' => [
+							'timeout' => (float)ini_get('default_socket_timeout'),
+						],
+					]),
+				],
+			);
+		} catch (SoapFault $e) {
+			throw new VatCheckUnavailableException($e->getMessage(), $e->getCode(), $e);
+		}
+
 		if ($businessCountryCode) {
 			$this->setBusinessCountryCode($businessCountryCode);
 		}
