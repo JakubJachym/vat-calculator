@@ -47,7 +47,6 @@ class VatRatesTest extends TestCase
 	{
 		$class = new ReflectionClass($this->vatRates);
 		$property = $class->getProperty('now');
-		$property->setAccessible(true);
 
 		$date = '2020-06-30 23:59:59 Europe/Berlin';
 		$property->setValue($this->vatRates, new DateTimeImmutable($date));

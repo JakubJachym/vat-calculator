@@ -23,26 +23,8 @@ class VatCalculator
 	private ?string $businessVatNumber = null;
 
 
-	/**
-	 * @throws VatCheckUnavailableException
-	 */
 	public function __construct(private readonly VatRates $vatRates, ?string $businessCountryCode = null, ?string $businessVatNumber = null)
 	{
-		try {
-			$this->soapClient = new SoapClient(
-				self::VAT_SERVICE_URL,
-				[
-					'stream_context' => stream_context_create([
-						'http' => [
-							'timeout' => (float)ini_get('default_socket_timeout'),
-						],
-					]),
-				],
-			);
-		} catch (SoapFault $e) {
-			throw new VatCheckUnavailableException($e->getMessage(), $e->getCode(), $e);
-		}
-
 		if ($businessCountryCode) {
 			$this->setBusinessCountryCode($businessCountryCode);
 		}
@@ -187,7 +169,7 @@ class VatCalculator
 					vatNumber: string,
 					requestIdentifier: string|null
 				} $result */
-			$result = $this->soapClient->checkVatApprox([
+			$result = $this->getSoapClient()->checkVatApprox([
 				'countryCode' => $countryCode,
 				'vatNumber' => $vatNumber,
 				'requesterCountryCode' => $requesterVatNumber ? substr($requesterVatNumber, 0, 2) : null,
@@ -203,6 +185,32 @@ class VatCalculator
 	public function setSoapClient(SoapClient $soapClient): void
 	{
 		$this->soapClient = $soapClient;
+	}
+
+
+	/**
+	 * @throws VatCheckUnavailableException
+	 */
+	private function getSoapClient(): SoapClient
+	{
+		if (!isset($this->soapClient)) {
+			try {
+				$this->soapClient = new SoapClient(
+					self::VAT_SERVICE_URL,
+					[
+						'stream_context' => stream_context_create([
+							'http' => [
+								'timeout' => (float)ini_get('default_socket_timeout'),
+							],
+						]),
+					],
+				);
+			} catch (SoapFault $e) {
+				throw new VatCheckUnavailableException($e->getMessage(), $e->getCode(), $e);
+			}
+		}
+
+		return $this->soapClient;
 	}
 
 }
