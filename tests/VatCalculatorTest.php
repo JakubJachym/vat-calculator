@@ -31,7 +31,6 @@ class VatCalculatorTest extends TestCase
 
 		$class = new ReflectionClass($this->vatRates);
 		$property = $class->getProperty('now');
-		$property->setAccessible(true);
 		$property->setValue($this->vatRates, new DateTimeImmutable(self::DATE));
 	}
 
